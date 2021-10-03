@@ -16,7 +16,23 @@ const resolvers = {
     },
   },
   Mutation: {
-    login: {},
+    login: async (parent, { email, password }) => {
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        throw new AuthenticationError("Incorrect Credentials.");
+      }
+
+      // .isCorrectPassword is a pre defined method on the user model.
+      const passwordCheck = await user.isCorrectPassword(password);
+
+      if (!passwordCheck) {
+        throw new AuthenticationError("Incorrect Credentials.");
+      }
+
+      const token = signToken(user);
+      return { token, user };
+    },
     addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);

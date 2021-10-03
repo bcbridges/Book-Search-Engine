@@ -50,8 +50,23 @@ const resolvers = {
 
         return addedBook;
       }
+
+      throw new AuthenticationError("Please login to save a book.");
     },
-    removeBook: {},
+    removeBook: async (parent, { bookId }, context) => {
+      if (context.user) {
+        // See if new: true is needed - docs look like that option is ignored for a remove operation
+        const removeBook = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          { $pull: { savedBooks: { bookId } } },
+          { new: true }
+        );
+
+        return removeBook;
+      }
+
+      throw new AuthenticationError("Please log in to remove a saved book.");
+    },
   },
 };
 

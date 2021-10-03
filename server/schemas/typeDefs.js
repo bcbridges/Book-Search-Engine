@@ -8,32 +8,32 @@ const typeDefs = gql`
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-    saveBook(???): User
-    removeBook(bookId: String!): User
+    saveBook(bookData: BookInput!): User
+    removeBook(bookId: ID!): User
   }
 
-# The ! operator means it can't return NULL
+  # The ! operator means it can't return NULL
   type User {
-      _id: ID
-      username: String
-      email: String
-      bookCount: Int
-      savedBooks: [Book]
+    _id: ID!
+    username: String!
+    email: String!
+    bookCount: Int
+    savedBooks: [Book]
   }
 
   type Book {
-      bookId: String
-      authors: [String]
-      description: String
-      title: String
-      image: String
-      link: String
+    bookId: String
+    authors: [String]
+    description: String
+    title: String
+    image: String
+    link: String
   }
 
   # Need to figure out the token stuff
   type Auth {
-      token:
-      user: User
+    token: ID!
+    user: User
   }
 `;
 

@@ -34,25 +34,25 @@ const resolvers = {
       return { token, user };
     },
     addUser: async (parent, { username, email, password }) => {
-      const user = await User.create({ name, email, password });
+      const user = await User.create({ username, email, password });
       console.log(user);
       const token = signToken(user);
       return { token, user };
     },
-    saveBook: async (parent, { Book }, context) => {
-      if (context.user) {
-        const addedBook = await User.findByIdAndUpdate(
+    saveBook: async (parent, args, context) => {
+      console.log(context.user);
+      if (context.user.email) {
+        console.log(context.user);
+        return User.findOneAndUpdate(
           {
             _id: context.user._id,
           },
-          { $push: { savedBooks: Book } },
+          { $addToSet: { savedBooks: args.input } },
           { new: true }
         );
-
-        return addedBook;
+      } else {
+        throw new AuthenticationError("Please login to save a book.");
       }
-
-      throw new AuthenticationError("Please login to save a book.");
     },
     removeBook: async (parent, { bookId }, context) => {
       if (context.user) {

@@ -1,22 +1,10 @@
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`
-  type Query {
-    me: User
-  }
-
-  type Mutation {
-    login(email: String!, password: String!): Auth
-    addUser(username: String!, email: String!, password: String!): Auth
-    saveBook(bookData: String!): User
-    removeBook(bookId: ID!): User
-  }
-
-  # The ! operator means it can't return NULL
   type User {
     _id: ID!
-    username: String!
-    email: String!
+    username: String
+    email: String
     bookCount: Int
     savedBooks: [Book]
   }
@@ -30,10 +18,20 @@ const typeDefs = gql`
     link: String
   }
 
-  # Need to figure out the token stuff
   type Auth {
     token: ID!
     user: User
+  }
+
+  type Query {
+    me: User
+  }
+
+  type Mutation {
+    login(email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!): Auth
+    saveBook(bookData: String!): User
+    removeBook(bookId: ID!): User
   }
 `;
 

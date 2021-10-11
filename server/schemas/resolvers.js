@@ -41,9 +41,9 @@ const resolvers = {
     },
     saveBook: async (parent, args, context) => {
       console.log(context.user);
-      if (context.user.email) {
-        console.log(context.user);
-        return User.findOneAndUpdate(
+      if (context.user) {
+        console.log(context);
+        return await User.findOneAndUpdate(
           {
             _id: context.user._id,
           },
